@@ -1,4 +1,5 @@
 import { type Metadata } from 'next'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import { Providers } from '@/app/providers'
 import { Layout } from '@/components/Layout'
@@ -30,7 +31,10 @@ export default function RootLayout({
       <body className="flex h-full bg-zinc-50 dark:bg-black">
         <Providers>
           <div className="flex w-full">
-            <Layout>{children}</Layout>
+            <Layout>
+              {children}
+              <SpeedInsights />
+            </Layout>
           </div>
         </Providers>
       </body>
