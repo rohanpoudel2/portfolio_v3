@@ -1,0 +1,470 @@
+import {ArticleLayout} from "@/components/ArticleLayout"
+
+export const article = {
+  author: "Rohan Poudel",
+  date: '2024-02-08',
+  title: 'Image and Video compressor in NodeJs',
+  description: 'This is how I created an npm package that can be used from the CLI to compress images and videos. Learn more about it in this article.'
+}
+
+export const metadata = {
+  title: article.title,
+  description: article.description
+}
+
+export default (props) => <ArticleLayout article={article} {...props} />
+
+## First things first
+Before I begin to explain how I created this package, I would like to give a big shoutout to [`sharp`](https://sharp.pixelplumbing.com/) and [`fluent-ffmpeg`](https://www.npmjs.com/package/fluent-ffmpeg) because this package wouldn't be possible without these awesome libraries.
+
+While I was compressing all my photos from my recent motorbike trip to RARA lake, I did not want to use shady-looking online third-party sites to compress my pictures. So, I came up with a solution.
+
+Since I was getting a little rusty using Node.js, I decided it was the perfect time to reignite my knowledge.
+
+Also, before moving on to explain the code below, I want to let you know that I am aware the code is not the best and can be improved significantly. I created this library in a total time of 1 to 1.5 hours. So, yeah 😅
+
+My project has the following structure:
+
+```js
+image-and-video-compressor
+├── cli.js
+├── formats.json
+├── package.json
+├── src
+│   ├── image.js
+│   ├── index.js
+│   └── video.js
+└── utils
+    └── fns.js
+```
+
+## package.json
+
+This file contains metadata and configuration information about the Node.js package. It specifies details such as the author, license, version, keywords, and dependencies of the package. It also includes scripts for running specific tasks related to image and video optimization. Additionally, it defines the entry point of the package and sets up command-line execution.
+
+```js
+{
+  "author": "Rohan Poudel",
+  "name": "image-and-video-compressor",
+  "license": "MIT",
+  "version": "1.0.6",
+  "keywords": [
+    "image",
+    "video",
+    "compressor",
+    "nodejs"
+  ],
+  "description": "Compress Image and Video using node",
+  "bin": {
+    "imgvidcompress": "./cli.js"
+  },
+  "scripts": {
+    "optimise:image": "node ./cli.js optimise:image",
+    "optimise:video": "node ./cli.js optimise:video"
+  },
+  "main": "cli.js",
+  "dependencies": {
+    "fluent-ffmpeg": "^2.1.2",
+    "sharp": "^0.33.2",
+    "yargs": "^17.7.2"
+  }
+}
+```
+
+## formats.json
+
+This JSON file stores lists of supported image and video formats. It categorizes formats into ImageFormats and VideoFormats arrays.
+
+```js
+{
+  "ImageFormats": [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".webp",
+    ".avif",
+    ".svg",
+    ".tiff",
+    ".gif",
+    "jpg",
+    "jpeg",
+    "png",
+    "webp",
+    "avif",
+    "svg",
+    "tiff",
+    "gif"
+  ],
+  "VideoFormats": [
+    ".mp4",
+    ".mov",
+    ".avi",
+    ".mkv",
+    ".webm",
+    "mp4",
+    "mov",
+    "avi",
+    "mkv",
+    "webm"
+  ]
+}
+```
+
+## cli.js
+
+This file serves as the command-line interface (CLI) for the image and video compressor package. It utilizes the yargs library for parsing command-line arguments and executing appropriate actions based on the provided commands.
+
+```js
+#!/usr/bin/env node
+const path = require("path");
+
+const { startImageProcess, startVideoProcess } = require(
+  path.join(__dirname, "src"),
+);
+const Formats = require(path.join(__dirname, "formats.json"));
+const { processExtension } = require(path.join(__dirname, "utils/fns.js"));
+
+const argv = require("yargs")
+  .command("optimise:image", "Optimise images", {
+    loadFolder: {
+      describe: "Path to the Image folder",
+      demandOption: true,
+      type: "string",
+    },
+    quality: {
+      describe: "Quality parameter (between   10 and   100)",
+      default: 20,
+      type: "number",
+      coerce: (quality) => {
+        if (quality < 10) {
+          throw new Error("Quality cannot be less than   10.");
+        }
+        if (quality > 100) {
+          throw new Error("Quality cannot be more than   100.");
+        }
+        return quality;
+      },
+    },
+    output: {
+      describe: "Image output format",
+      type: "string",
+      default: ".webp",
+      coerce: (output) => {
+        if (!Formats.ImageFormats.includes(output)) {
+          throw new Error(
+            `Supported formats: \n Images: ${Formats.ImageFormats.filter((format) => format.slice(0, 1) == ".").join(", ")}`,
+          );
+        }
+        return output.trim();
+      },
+    },
+  })
+  .command("optimise:video", "Optimise videos", {
+    loadFolder: {
+      describe: "Path to the Video folder",
+      demandOption: true,
+      type: "string",
+    },
+    quality: {
+      describe: "Quality parameter (between   10 and   100)",
+      default: 20,
+      type: "number",
+      coerce: (quality) => {
+        if (quality < 10) {
+          throw new Error("Quality cannot be less than   10.");
+        }
+        if (quality > 100) {
+          throw new Error("Quality cannot be more than   100.");
+        }
+        return quality;
+      },
+    },
+    output: {
+      describe: "Video output format",
+      type: "string",
+      default: ".mp4",
+      coerce: (output) => {
+        if (!Formats.VideoFormats.includes(output)) {
+          throw new Error(
+            `Supported formats: \n Videos: ${Formats.VideoFormats.filter((format) => format.slice(0, 1) == ".").join(", ")} `,
+          );
+        }
+        return output.trim();
+      },
+    },
+  })
+  .scriptName("imgvidcompress")
+  .usage("Usage: imgvidcompress <command> [options]")
+  .example(
+    'imgvidcompress optimise:image --loadFolder="/path/to/images" --quality=80 --output=".webp"',
+  )
+  .example(
+    'imgvidcompress optimise:video --loadFolder="/path/to/videos" --quality=50 --output=".mp4"',
+  )
+  .epilogue("For more information, visit: https://www.rohanpoudel.com.np")
+  .help().argv;
+
+(() => {
+  const { _ } = argv;
+  const command = _[0];
+
+  const loadFolder = argv.loadFolder.replace(/["']/g, "");
+  const quality = parseInt(argv.quality.toString().replace(/["']/g, ""));
+  const output = processExtension(argv.output);
+
+  switch (command) {
+    case "optimise:image": {
+      startImageProcess(loadFolder, quality, output);
+      break;
+    }
+    case "optimise:video": {
+      startVideoProcess(loadFolder, quality, output);
+      break;
+    }
+    default: {
+      console.error(
+        'Invalid command. Use "optimise:image" or "optimise:video"',
+      );
+      process.exit(1);
+    }
+  }
+})();
+```
+
+## utils/fns.js
+
+This module exports a function processExtension that processes file extensions. It ensures that file extensions consistently include a dot (".") at the beginning.
+
+```js
+module.exports = {
+  processExtension: ext => ext.includes('.') ? ext : `.${ext}`
+}
+```
+
+## src/index.js
+
+This file contains functions for starting the image and video compression processes. It utilizes child processes (forks) to execute separate image and video compression scripts (image.js and video.js). These functions communicate with the child processes through message passing.
+
+```js
+const path = require('path');
+const { fork } = require('child_process');
+
+module.exports = {
+  startImageProcess: (loadFolder, quality, output) => {
+    const optimiseFolder = path.join(loadFolder, 'optimised_images');
+
+    const imageProcess = fork(path.join(__dirname, 'image.js'));
+    imageProcess.send({ loadFolder, optimiseFolder, quality, output });
+    imageProcess.on('message', message => {
+      const { text } = message;
+      console.log(text);
+    });
+  },
+  startVideoProcess: (loadFolder, quality, output) => {
+    const optimiseFolder = path.join(loadFolder, 'optimised_videos');
+
+    const videoProcess = fork(path.join(__dirname, 'video.js'));
+    videoProcess.send({ loadFolder, optimiseFolder, quality, output });
+    videoProcess.on('message', message => {
+      const { text } = message;
+      console.log(text);
+    })
+  }
+}
+```
+
+## src/image.js
+
+This file handles the optimization of images. It listens for messages from the parent process containing details about the image optimization task. It then processes each image file found in the specified directory, compresses it using the sharp library, and saves the optimized image to the output directory.
+
+```js
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp');
+
+const EXTENSION = require(path.join(__dirname, '../formats.json')).ImageFormats;
+
+process.on('message', payload => {
+  const {
+    loadFolder,
+    optimiseFolder,
+    quality,
+    output
+  } = payload;
+
+  optimiseImages(loadFolder, optimiseFolder, quality, output);
+});
+
+const isImage = fileName => EXTENSION.includes(path.extname(fileName).toLowerCase());
+
+let processCount = 0;
+let totalImage = 0;
+
+const progressLog = () => {
+  processCount++;
+  const process = Math.floor(processCount / totalImage * 100);
+  console.log(`⌛️ Optimising Image: ${process}% done \n`);
+}
+
+const loadImages = (loadFolder) => {
+  return new Promise((resolve, reject) => {
+    if (!fs.existsSync(loadFolder)) {
+      fs.mkdirSync(loadFolder);
+      reject(`Add images to this path: ${loadFolder}`);
+    }
+    fs.readdir(loadFolder, (err, files) => {
+      if (err) {
+        reject(err);
+      } else {
+        const imagesPath = files
+          .map((fileName) => path.join(loadFolder, fileName))
+          .filter(isImage);
+        totalImage = imagesPath.length;
+        resolve(imagesPath);
+      }
+    });
+  });
+};
+
+const processImage = (imagePath, optimiseFolder, quality, output) => {
+  return new Promise((resolve, reject) => {
+    if (!fs.existsSync(optimiseFolder)) {
+      fs.mkdirSync(optimiseFolder);
+    }
+    let image = sharp(imagePath).webp({ quality });
+    const optimisedPath = path.join(optimiseFolder, path.basename(imagePath, path.extname(imagePath)) + output);
+
+    image.toFile(optimisedPath, (err) => {
+      if (err) {
+        console.error(`Error processing image ${imagePath}: ${err}`);
+        reject(err);
+      } else {
+        console.log(`Image optimised and saved at: ${optimisedPath} \n`);
+        progressLog();
+        resolve();
+      }
+    });
+  });
+};
+
+const optimiseImages = (loadFolder, optimiseFolder, quality, output) => {
+  loadImages(loadFolder)
+    .then(imagesPath => {
+      if (imagesPath) {
+        return Promise.all(imagesPath.map(imagePath => processImage(imagePath, optimiseFolder, quality, output)));
+      }
+    })
+    .then(() => {
+      process.send({ text: 'Image optimisation completed 😄 \n' });
+      process.exit();
+    })
+    .catch(err => {
+      console.error(err);
+      process.send({ text: 'Image optimisation error 😵‍💫 \n' });
+      process.exit();
+    });
+};
+```
+
+## src/video.js
+
+This script handles the optimization of videos. Similar to image.js, it listens for messages from the parent process containing details about the video optimization task. It processes each video file found in the specified directory, compresses it using the fluent-ffmpeg library, and saves the optimized video to the output directory.
+
+```js
+const fs = require('fs');
+const path = require('path');
+const ffmpeg = require('fluent-ffmpeg');
+
+const EXTENSION = require(path.join(__dirname, '../formats.json')).VideoFormats;
+
+process.on('message', payload => {
+  const {
+    loadFolder,
+    optimiseFolder,
+    quality,
+    output
+  } = payload;
+
+  optimiseVideo(loadFolder, optimiseFolder, quality, output);
+});
+
+const isVideo = fileName => EXTENSION.includes(path.extname(fileName).toLowerCase());
+
+const loadVideos = (loadFolder) => {
+  return new Promise((resolve, reject) => {
+    if (!fs.existsSync(loadFolder)) {
+      fs.mkdirSync(loadFolder);
+      reject(`Add videos to this path: ${loadFolder}`);
+    }
+    fs.readdir(loadFolder, (err, files) => {
+      if (err) {
+        reject(err);
+      } else {
+        const videosPath = files
+          .map((fileName) => path.join(loadFolder, fileName))
+          .filter(isVideo);
+        resolve(videosPath);
+      }
+    });
+  });
+};
+
+const processVideo = (videoPath, optimiseFolder, quality, output) => {
+  return new Promise((resolve, reject) => {
+    if (!fs.existsSync(optimiseFolder)) {
+      fs.mkdirSync(optimiseFolder);
+    }
+    const optimisedPath = path.join(optimiseFolder, path.basename(videoPath, path.extname(videoPath)) + output);
+    const adjustedQuality = 100 - quality;
+    ffmpeg(videoPath)
+      .fps(30)
+      .addOptions([`-crf ${adjustedQuality}`])
+      .keepDAR()
+      .on("end", () => {
+        resolve();
+      })
+      .on("error", (err) => {
+        reject(err);
+      })
+      .on("progress", (progress) => {
+        console.log(`⌛️ Optimising video: ${Math.floor(progress.percent)}% done \n`);
+      })
+      .save(optimisedPath);
+  })
+}
+
+const optimiseVideo = (loadFolder, optimiseFolder, quality, output) => {
+  loadVideos(loadFolder)
+    .then(videosPath => {
+      if (videosPath) {
+        return Promise.all(videosPath.map(videoPath => processVideo(videoPath, optimiseFolder, quality, output)));
+      }
+    })
+    .then(() => {
+      process.send({ text: 'Video optimisation completed 😄' });
+      process.exit();
+    })
+    .catch(err => {
+      console.error(err);
+      process.send({ text: 'Video optimisation error 😵‍💫' });
+      process.exit();
+    })
+}
+```
+
+## Credits
+
+This package wouldn't be possible without the following awesome libraries:
+
+- [`sharp`](https://sharp.pixelplumbing.com/) - High-performance Node.js image processing.
+- [`fluent-ffmpeg`](https://www.npmjs.com/package/fluent-ffmpeg) - A fluent API to FFMPEG.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/rohanpoudel2/image_video_compressor/blob/main/LICENSE) file for details.
+
+### [`GitHub Repo URL`](https://github.com/rohanpoudel2/image_video_compressor)
+
+### [`Npm URL`](https://www.npmjs.com/package/image-and-video-compressor)
+
+### [`Created by`](https://github.com/rohanpoudel2) - Rohan Poudel

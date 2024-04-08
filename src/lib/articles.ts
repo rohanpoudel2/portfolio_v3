@@ -1,4 +1,5 @@
 import glob from 'fast-glob'
+import dayjs from "dayjs"
 
 interface Article {
   title: string
@@ -32,5 +33,5 @@ export async function getAllArticles() {
 
   let articles = await Promise.all(articleFilenames.map(importArticle))
 
-  return articles.sort((a, z) => +new Date(z.date) - +new Date(a.date))
+  return articles.sort((a, z) => dayjs(z.date).valueOf() - dayjs(a.date).valueOf())
 }

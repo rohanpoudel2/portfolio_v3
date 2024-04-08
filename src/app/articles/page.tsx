@@ -37,7 +37,7 @@ function Article({ article }: { article: ArticleWithSlug }) {
 export const metadata: Metadata = {
   title: 'Articles',
   description:
-    'A collection of my detailed insights into programming, product design, and other subjects, organized by date.',
+    'A collection of my detailed insights into programming, product design, and other subjects.',
 }
 
 export default async function ArticlesIndex() {
@@ -46,7 +46,7 @@ export default async function ArticlesIndex() {
   return (
     <SimpleLayout
       title="My Insights on Technology, Travel, and More."
-      intro='A collection of my detailed insights into programming, product design, and other subjects, organized by date.'
+      intro='A collection of my detailed insights into programming, product design, and other subjects.'
     >
       <div className="md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40">
         <div className="flex max-w-3xl flex-col space-y-16">

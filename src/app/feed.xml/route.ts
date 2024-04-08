@@ -17,7 +17,7 @@ export async function GET(req: Request) {
 
   let feed = new Feed({
     title: author.name,
-    description: 'Your blog description',
+    description: 'Greetings from the labyrinth of my intellect 🧠',
     author,
     id: siteUrl,
     link: siteUrl,
