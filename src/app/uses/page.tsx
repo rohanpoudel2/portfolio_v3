@@ -61,9 +61,6 @@ export default function Uses() {
           <Tool title="iTerm2">
             Started to use this when I read about it on a medium blog post. Not sure I am using all the features though 😅.
           </Tool>
-          <Tool title="TablePlus">
-            Heard about it when I was learning Laravel from Laracasts. Have been using it ever since.
-          </Tool>
           <Tool title="ChatGPT">
             😅
           </Tool>
@@ -76,11 +73,6 @@ export default function Uses() {
         <ToolsSection title="Motorbike">
           <Tool title="Honda XR 190L">
             It does not look the most modern and does not have all the latest features, but it can take you anywhere.
-          </Tool>
-        </ToolsSection>
-        <ToolsSection title="Camera">
-          <Tool title="GoPro Hero 8 Black">
-            Not the most reliable GoPro model in my opinion. Even after several years of its release, it still has bugs. But can&apos;t complain about the video quality and the stabilization.
           </Tool>
         </ToolsSection>
       </div>
