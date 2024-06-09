@@ -14,11 +14,11 @@ import {
   XIcon,
 } from '@/components/SocialIcons'
 import danphe from '@/images/logos/danphe.svg'
-import image1 from '@/images/photos/image-1.jpg'
-import image2 from '@/images/photos/image-2.jpg'
-import image3 from '@/images/photos/image-3.jpg'
-import image4 from '@/images/photos/image-4.jpg'
-import image5 from '@/images/photos/image-5.jpg'
+import image1 from '@/images/photos/image-1.jpeg'
+import image2 from '@/images/photos/image-2.jpeg'
+import image3 from '@/images/photos/image-3.jpeg'
+import image4 from '@/images/photos/image-4.jpeg'
+import image5 from '@/images/photos/image-5.jpeg'
 
 import { type ArticleWithSlug, getAllArticles } from '@/lib/articles'
 import { formatDate } from '@/lib/formatDate'
@@ -204,8 +204,8 @@ export default async function Home() {
           </h1>
           <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
             I&apos;m Rohan Poudel, a tech enthusiast and an amateur guitarist based in Kathmandu, Nepal.
-            Specializing in Next.js, Ruby on Rails, Node.js, React, and React Native. I thrive on unraveling intricate tech challenges. As an avid guitarist,
-            I find joy and inspiration in strumming melodies while also exploring the endless possibilities within the realm of technology.
+            Specializing in Ruby on Rails, Next.js, Node.js, React, and React Native. I thrive on unraveling intricate tech challenges. As an avid guitarist and motorcycle adventurer,
+            I find joy and inspiration in strumming melodies and traveling on my motorbike while also exploring the endless possibilities within the realm of technology.
           </p>
           <div className="mt-6 flex gap-6">
             <SocialLink
