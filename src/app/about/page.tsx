@@ -96,6 +96,11 @@ export default function About() {
               I&apos;ve embraced the thrill of exploration on two wheels.
               It&apos;s all part of my journey towards discovering new horizons and making the most of life&apos;s adventures.
             </p>
+            <p>
+              <Link href='/uses' className='text-sky-500 underline'>
+                Would you like to know the tools I use?
+              </Link>
+            </p>
           </div>
         </div>
         <div className="lg:pl-20">
