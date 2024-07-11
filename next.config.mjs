@@ -6,12 +6,16 @@ import remarkGfm from 'remark-gfm'
 const nextConfig = {
   output: 'standalone',
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx'],
-  env: {
-    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-    NEXT_PUBLIC_NODEMAILER_EMAIL: process.env.NEXT_PUBLIC_NODEMAILER_EMAIL,
-    NEXT_PUBLIC_NODEMAILER_PW: process.env.NEXT_PUBLIC_NODEMAILER_PW,
-    NEXT_PUBLIC_EMAIL: process.env.NEXT_PUBLIC_EMAIL,
-  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'img.icons8.com',
+        port: '',
+        pathname: '/**'
+      }
+    ]
+  }
 }
 
 const withMDX = nextMDX({

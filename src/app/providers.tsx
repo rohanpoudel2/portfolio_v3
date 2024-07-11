@@ -22,9 +22,7 @@ function ThemeWatcher() {
 
     function onMediaChange() {
       let systemTheme = media.matches ? 'dark' : 'light'
-      if (resolvedTheme === systemTheme) {
-        setTheme('system')
-      }
+      setTheme(systemTheme)
     }
 
     onMediaChange()
@@ -33,7 +31,7 @@ function ThemeWatcher() {
     return () => {
       media.removeEventListener('change', onMediaChange)
     }
-  }, [resolvedTheme, setTheme])
+  }, [setTheme])
 
   return null
 }
