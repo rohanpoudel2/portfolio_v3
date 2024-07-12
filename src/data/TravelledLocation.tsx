@@ -76,6 +76,11 @@ const NepalLocations: Location[] = [
   { title: 'Butwal', position: [27.689693, 83.451492], description: 'Butwal', icon: motorBikeMarker },
   { title: 'Manma', position: [29.151198, 81.608453], description: 'Manma', icon: motorBikeMarker },
   { title: 'Lahan', position: [26.729662, 86.479484], description: 'Lahan', icon: carMarker },
+  { title: 'Bandipur', position: [27.939394, 84.408864], description: 'Bandipur', icon: carMarker },
+  { title: 'Itahari', position: [26.664600, 87.271790], description: 'Itahari', icon: carMarker },
+  { title: 'Ghurmi', position: [27.176472, 86.394234], description: 'Ghurmi', icon: carMarker },
+  { title: 'Koshi Barrage', position: [26.526206, 86.926975], description: 'Koshi Barrage', icon: carMarker },
+  { title: 'Gorkha', position: [28.004309, 84.628797], description: 'Gorkha', icon: motorBikeMarker },
 ]
 
 const UAELocations: Location[] = [
