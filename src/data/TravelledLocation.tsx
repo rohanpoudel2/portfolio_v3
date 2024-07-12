@@ -74,7 +74,8 @@ const NepalLocations: Location[] = [
   { title: 'Marpha', position: [28.752048, 83.686032], description: 'Marpha', icon: motorBikeMarker },
   { title: 'Pokhara', position: [28.208015, 83.955629], description: 'Pokhara', icon: motorBikeMarker },
   { title: 'Butwal', position: [27.689693, 83.451492], description: 'Butwal', icon: motorBikeMarker },
-  { title: 'Lahan', position: [26.729662, 86.479484], description: 'Lahan', icon: motorBikeMarker },
+  { title: 'Manma', position: [29.151198, 81.608453], description: 'Manma', icon: motorBikeMarker },
+  { title: 'Lahan', position: [26.729662, 86.479484], description: 'Lahan', icon: carMarker },
 ]
 
 const UAELocations: Location[] = [
