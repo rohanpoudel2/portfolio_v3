@@ -47,27 +47,35 @@ This file contains metadata and configuration information about the Node.js pack
   "author": "Rohan Poudel",
   "name": "image-and-video-compressor",
   "license": "MIT",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "keywords": [
     "image",
     "video",
     "compressor",
     "nodejs"
   ],
-  "description": "Compress Image and Video using node",
+  "description": "Compress Image and Video using Node.js",
   "bin": {
     "imgvidcompress": "./cli.js"
   },
   "scripts": {
     "optimise:image": "node ./cli.js optimise:image",
-    "optimise:video": "node ./cli.js optimise:video"
+    "optimise:video": "node ./cli.js optimise:video",
   },
   "main": "cli.js",
   "dependencies": {
     "fluent-ffmpeg": "^2.1.2",
     "sharp": "^0.33.2",
     "yargs": "^17.7.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rohanpoudel2/image_video_compressor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rohanpoudel2/image_video_compressor/issues"
+  },
+  "homepage": "https://github.com/rohanpoudel2/image_video_compressor#readme"
 }
 ```
 
@@ -77,36 +85,17 @@ This JSON file stores lists of supported image and video formats. It categorizes
 
 ```js
 {
-  "ImageFormats": [
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".webp",
-    ".avif",
-    ".svg",
-    ".tiff",
-    ".gif",
-    "jpg",
-    "jpeg",
-    "png",
-    "webp",
-    "avif",
-    "svg",
-    "tiff",
-    "gif"
-  ],
-  "VideoFormats": [
-    ".mp4",
-    ".mov",
-    ".avi",
-    ".mkv",
-    ".webm",
-    "mp4",
-    "mov",
-    "avi",
-    "mkv",
-    "webm"
-  ]
+  "ImageFormats": {
+    ".jpg": "jpeg",
+    ".jpeg": "jpeg",
+    ".png": "png",
+    ".webp": "webp",
+    ".avif": "avif",
+    ".svg": "svg",
+    ".tiff": "tiff",
+    ".gif": "gif"
+  },
+  "VideoFormats": [".mp4", ".mov", ".avi", ".mkv", ".webm"]
 }
 ```
 
@@ -117,13 +106,11 @@ This file serves as the command-line interface (CLI) for the image and video com
 ```js
 #!/usr/bin/env node
 const path = require("path");
-
 const { startImageProcess, startVideoProcess } = require(
-  path.join(__dirname, "src"),
+  path.join(__dirname, "src")
 );
 const Formats = require(path.join(__dirname, "formats.json"));
 const { processExtension } = require(path.join(__dirname, "utils/fns.js"));
-
 const argv = require("yargs")
   .command("optimise:image", "Optimise images", {
     loadFolder: {
@@ -132,15 +119,15 @@ const argv = require("yargs")
       type: "string",
     },
     quality: {
-      describe: "Quality parameter (between   10 and   100)",
+      describe: "Quality parameter (between 10 and 100)",
       default: 20,
       type: "number",
       coerce: (quality) => {
         if (quality < 10) {
-          throw new Error("Quality cannot be less than   10.");
+          throw new Error("Quality cannot be less than 10.");
         }
         if (quality > 100) {
-          throw new Error("Quality cannot be more than   100.");
+          throw new Error("Quality cannot be more than 100.");
         }
         return quality;
       },
@@ -150,9 +137,9 @@ const argv = require("yargs")
       type: "string",
       default: ".webp",
       coerce: (output) => {
-        if (!Formats.ImageFormats.includes(output)) {
+        if (!Object.keys(Formats.ImageFormats).includes(output)) {
           throw new Error(
-            `Supported formats: \n Images: ${Formats.ImageFormats.filter((format) => format.slice(0, 1) == ".").join(", ")}`,
+            `Supported formats: \n Images: ${Object.keys(Formats.ImageFormats).join(", ")}`
           );
         }
         return output.trim();
@@ -166,15 +153,15 @@ const argv = require("yargs")
       type: "string",
     },
     quality: {
-      describe: "Quality parameter (between   10 and   100)",
+      describe: "Quality parameter (between 10 and 100)",
       default: 20,
       type: "number",
       coerce: (quality) => {
         if (quality < 10) {
-          throw new Error("Quality cannot be less than   10.");
+          throw new Error("Quality cannot be less than 10.");
         }
         if (quality > 100) {
-          throw new Error("Quality cannot be more than   100.");
+          throw new Error("Quality cannot be more than 100.");
         }
         return quality;
       },
@@ -186,7 +173,7 @@ const argv = require("yargs")
       coerce: (output) => {
         if (!Formats.VideoFormats.includes(output)) {
           throw new Error(
-            `Supported formats: \n Videos: ${Formats.VideoFormats.filter((format) => format.slice(0, 1) == ".").join(", ")} `,
+            `Supported formats: \n Videos: ${Formats.VideoFormats.join(", ")} `
           );
         }
         return output.trim();
@@ -196,10 +183,10 @@ const argv = require("yargs")
   .scriptName("imgvidcompress")
   .usage("Usage: imgvidcompress <command> [options]")
   .example(
-    'imgvidcompress optimise:image --loadFolder="/path/to/images" --quality=80 --output=".webp"',
+    'imgvidcompress optimise:image --loadFolder="/path/to/images" --quality=80 --output=".webp"'
   )
   .example(
-    'imgvidcompress optimise:video --loadFolder="/path/to/videos" --quality=50 --output=".mp4"',
+    'imgvidcompress optimise:video --loadFolder="/path/to/videos" --quality=50 --output=".mp4"'
   )
   .epilogue("For more information, visit: https://www.rohanpoudel.com.np")
   .help().argv;
@@ -223,7 +210,7 @@ const argv = require("yargs")
     }
     default: {
       console.error(
-        'Invalid command. Use "optimise:image" or "optimise:video"',
+        'Invalid command. Use "optimise:image" or "optimise:video"'
       );
       process.exit(1);
     }
@@ -236,9 +223,75 @@ const argv = require("yargs")
 This module exports a function processExtension that processes file extensions. It ensures that file extensions consistently include a dot (".") at the beginning.
 
 ```js
+const fs = require("fs");
+const path = require("path");
+
+let processCount = 0;
+global.totalFiles = 0;
+
+const loadFiles = (loadFolder, filterFunction) => {
+  return new Promise((resolve, reject) => {
+    if (!fs.existsSync(loadFolder)) {
+      fs.mkdirSync(loadFolder);
+      reject(`Add files to this path: ${loadFolder}`);
+    }
+    fs.readdir(loadFolder, (err, files) => {
+      if (err) {
+        reject(err);
+      } else {
+        const filteredFiles = files
+          .map((fileName) => path.join(loadFolder, fileName))
+          .filter(filterFunction);
+        resolve(filteredFiles);
+      }
+    });
+  });
+};
+
+const createOptimiseFolder = (optimiseFolder) => {
+  if (!fs.existsSync(optimiseFolder)) {
+    fs.mkdirSync(optimiseFolder);
+  }
+};
+
+const cleanLogsPrint = (msg) => {
+  process.stdout.clearLine();
+  process.stdout.cursorTo(0);
+  process.stdout.write(msg);
+};
+
+const logProgress = (
+  progress = null,
+  type = "",
+  optimiseFolder = "",
+  completed = false
+) => {
+  processCount++;
+  const percentDone = parseInt(
+    progress || type === "Video"
+      ? progress
+      : Math.floor((processCount / global.totalFiles) * 100)
+  );
+  cleanLogsPrint(`⌛️ Optimising: ${percentDone}%`);
+  if (completed && percentDone == 100) {
+    cleanLogsPrint(
+      `\n ${type} optimised and saved at: ${optimiseFolder.split("/").slice(0, -1).join("/")}`
+    );
+  }
+};
+
+const lastOrOnlyOne = (arr, i) => i === arr.length - 1 || arr.length === 1;
+
+const processExtension = (ext) => (ext.includes(".") ? ext : `.${ext}`);
+
 module.exports = {
-  processExtension: ext => ext.includes('.') ? ext : `.${ext}`
-}
+  loadFiles,
+  createOptimiseFolder,
+  logProgress,
+  lastOrOnlyOne,
+  processExtension,
+  cleanLogsPrint,
+};
 ```
 
 ## src/index.js
@@ -246,31 +299,32 @@ module.exports = {
 This file contains functions for starting the image and video compression processes. It utilizes child processes (forks) to execute separate image and video compression scripts (image.js and video.js). These functions communicate with the child processes through message passing.
 
 ```js
-const path = require('path');
-const { fork } = require('child_process');
+const path = require("path");
+const { fork } = require("child_process");
+const { cleanLogsPrint } = require("../utils/fns");
 
 module.exports = {
   startImageProcess: (loadFolder, quality, output) => {
-    const optimiseFolder = path.join(loadFolder, 'optimised_images');
+    const optimiseFolder = path.join(loadFolder, "optimised_images");
 
-    const imageProcess = fork(path.join(__dirname, 'image.js'));
+    const imageProcess = fork(path.join(__dirname, "image.js"));
     imageProcess.send({ loadFolder, optimiseFolder, quality, output });
-    imageProcess.on('message', message => {
-      const { text } = message;
-      console.log(text);
-    });
+
+    imageProcess.on("message", (message) =>
+      cleanLogsPrint(`\n ${message.text}`)
+    );
   },
   startVideoProcess: (loadFolder, quality, output) => {
-    const optimiseFolder = path.join(loadFolder, 'optimised_videos');
+    const optimiseFolder = path.join(loadFolder, "optimised_videos");
 
-    const videoProcess = fork(path.join(__dirname, 'video.js'));
+    const videoProcess = fork(path.join(__dirname, "video.js"));
     videoProcess.send({ loadFolder, optimiseFolder, quality, output });
-    videoProcess.on('message', message => {
-      const { text } = message;
-      console.log(text);
-    })
-  }
-}
+
+    videoProcess.on("message", (message) =>
+      cleanLogsPrint(`\n ${message.text}`)
+    );
+  },
+};
 ```
 
 ## src/image.js
@@ -278,69 +332,54 @@ module.exports = {
 This file handles the optimization of images. It listens for messages from the parent process containing details about the image optimization task. It then processes each image file found in the specified directory, compresses it using the sharp library, and saves the optimized image to the output directory.
 
 ```js
-const fs = require('fs');
-const path = require('path');
-const sharp = require('sharp');
+const path = require("path");
+const sharp = require("sharp");
+const {
+  loadFiles,
+  createOptimiseFolder,
+  logProgress,
+  lastOrOnlyOne,
+} = require("../utils/fns");
 
-const EXTENSION = require(path.join(__dirname, '../formats.json')).ImageFormats;
+const Formats = require(path.join(__dirname, "../formats.json")).ImageFormats;
 
-process.on('message', payload => {
-  const {
-    loadFolder,
-    optimiseFolder,
-    quality,
-    output
-  } = payload;
-
+process.on("message", (payload) => {
+  const { loadFolder, optimiseFolder, quality, output } = payload;
   optimiseImages(loadFolder, optimiseFolder, quality, output);
 });
 
-const isImage = fileName => EXTENSION.includes(path.extname(fileName).toLowerCase());
+const isImage = (fileName) =>
+  Object.keys(Formats).includes(path.extname(fileName).toLowerCase());
 
-let processCount = 0;
-let totalImage = 0;
-
-const progressLog = () => {
-  processCount++;
-  const process = Math.floor(processCount / totalImage * 100);
-  console.log(`⌛️ Optimising Image: ${process}% done \n`);
-}
-
-const loadImages = (loadFolder) => {
+const processImage = (
+  imagePath,
+  optimiseFolder,
+  quality,
+  output,
+  completed
+) => {
   return new Promise((resolve, reject) => {
-    if (!fs.existsSync(loadFolder)) {
-      fs.mkdirSync(loadFolder);
-      reject(`Add images to this path: ${loadFolder}`);
-    }
-    fs.readdir(loadFolder, (err, files) => {
-      if (err) {
-        reject(err);
-      } else {
-        const imagesPath = files
-          .map((fileName) => path.join(loadFolder, fileName))
-          .filter(isImage);
-        totalImage = imagesPath.length;
-        resolve(imagesPath);
-      }
-    });
-  });
-};
+    createOptimiseFolder(optimiseFolder);
 
-const processImage = (imagePath, optimiseFolder, quality, output) => {
-  return new Promise((resolve, reject) => {
-    if (!fs.existsSync(optimiseFolder)) {
-      fs.mkdirSync(optimiseFolder);
+    const optimisedPath = path.join(
+      optimiseFolder,
+      path.basename(imagePath, path.extname(imagePath)) + output
+    );
+    let image = sharp(imagePath);
+
+    const formatMethod = Formats[output];
+    if (!formatMethod) {
+      return reject(new Error(`Unsupported output format: ${output}`));
     }
-    let image = sharp(imagePath).webp({ quality });
-    const optimisedPath = path.join(optimiseFolder, path.basename(imagePath, path.extname(imagePath)) + output);
+
+    image = image[formatMethod]({ quality });
 
     image.toFile(optimisedPath, (err) => {
       if (err) {
         console.error(`Error processing image ${imagePath}: ${err}`);
         reject(err);
       } else {
-        console.log(`Image optimised and saved at: ${optimisedPath} \n`);
-        progressLog();
+        logProgress(null, "Image", optimisedPath, completed);
         resolve();
       }
     });
@@ -348,19 +387,30 @@ const processImage = (imagePath, optimiseFolder, quality, output) => {
 };
 
 const optimiseImages = (loadFolder, optimiseFolder, quality, output) => {
-  loadImages(loadFolder)
-    .then(imagesPath => {
+  loadFiles(loadFolder, isImage)
+    .then((imagesPath) => {
       if (imagesPath) {
-        return Promise.all(imagesPath.map(imagePath => processImage(imagePath, optimiseFolder, quality, output)));
+        global.totalFiles = imagesPath.length;
+        return Promise.all(
+          imagesPath.map((imagePath, i) =>
+            processImage(
+              imagePath,
+              optimiseFolder,
+              quality,
+              output,
+              lastOrOnlyOne(imagesPath, i)
+            )
+          )
+        );
       }
     })
     .then(() => {
-      process.send({ text: 'Image optimisation completed 😄 \n' });
+      process.send({ text: "Image optimisation completed 😄" });
       process.exit();
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
-      process.send({ text: 'Image optimisation error 😵‍💫 \n' });
+      process.send({ text: "Image optimisation error 😵‍💫" });
       process.exit();
     });
 };
@@ -371,85 +421,88 @@ const optimiseImages = (loadFolder, optimiseFolder, quality, output) => {
 This script handles the optimization of videos. Similar to image.js, it listens for messages from the parent process containing details about the video optimization task. It processes each video file found in the specified directory, compresses it using the fluent-ffmpeg library, and saves the optimized video to the output directory.
 
 ```js
-const fs = require('fs');
-const path = require('path');
-const ffmpeg = require('fluent-ffmpeg');
+const path = require("path");
+const ffmpeg = require("fluent-ffmpeg");
+const {
+  loadFiles,
+  createOptimiseFolder,
+  logProgress,
+  lastOrOnlyOne,
+} = require("../utils/fns");
 
-const EXTENSION = require(path.join(__dirname, '../formats.json')).VideoFormats;
+const EXTENSION = require(path.join(__dirname, "../formats.json")).VideoFormats;
 
-process.on('message', payload => {
-  const {
-    loadFolder,
-    optimiseFolder,
-    quality,
-    output
-  } = payload;
-
+process.on("message", (payload) => {
+  const { loadFolder, optimiseFolder, quality, output } = payload;
   optimiseVideo(loadFolder, optimiseFolder, quality, output);
 });
 
-const isVideo = fileName => EXTENSION.includes(path.extname(fileName).toLowerCase());
+const isVideo = (fileName) =>
+  EXTENSION.includes(path.extname(fileName).toLowerCase());
 
-const loadVideos = (loadFolder) => {
+const processVideo = (
+  videoPath,
+  optimiseFolder,
+  quality,
+  output,
+  completed
+) => {
   return new Promise((resolve, reject) => {
-    if (!fs.existsSync(loadFolder)) {
-      fs.mkdirSync(loadFolder);
-      reject(`Add videos to this path: ${loadFolder}`);
-    }
-    fs.readdir(loadFolder, (err, files) => {
-      if (err) {
-        reject(err);
-      } else {
-        const videosPath = files
-          .map((fileName) => path.join(loadFolder, fileName))
-          .filter(isVideo);
-        resolve(videosPath);
-      }
-    });
-  });
-};
-
-const processVideo = (videoPath, optimiseFolder, quality, output) => {
-  return new Promise((resolve, reject) => {
-    if (!fs.existsSync(optimiseFolder)) {
-      fs.mkdirSync(optimiseFolder);
-    }
-    const optimisedPath = path.join(optimiseFolder, path.basename(videoPath, path.extname(videoPath)) + output);
+    createOptimiseFolder(optimiseFolder);
+    const optimisedPath = path.join(
+      optimiseFolder,
+      path.basename(videoPath, path.extname(videoPath)) + output
+    );
     const adjustedQuality = 100 - quality;
+
     ffmpeg(videoPath)
       .fps(30)
-      .addOptions([`-crf ${adjustedQuality}`])
-      .keepDAR()
+      .videoCodec("libx264")
+      .outputOptions([`-crf ${adjustedQuality}`, "-preset fast"])
       .on("end", () => {
+        logProgress(null, "Video", optimisedPath, completed);
         resolve();
       })
       .on("error", (err) => {
+        console.error(`Error processing video ${videoPath}: ${err}`);
         reject(err);
       })
       .on("progress", (progress) => {
-        console.log(`⌛️ Optimising video: ${Math.floor(progress.percent)}% done \n`);
+        const percentage = progress.percent ? progress.percent : 0;
+        logProgress(percentage, "Video", optimisedPath, false);
       })
       .save(optimisedPath);
-  })
-}
+  });
+};
 
 const optimiseVideo = (loadFolder, optimiseFolder, quality, output) => {
-  loadVideos(loadFolder)
-    .then(videosPath => {
+  loadFiles(loadFolder, isVideo)
+    .then((videosPath) => {
       if (videosPath) {
-        return Promise.all(videosPath.map(videoPath => processVideo(videoPath, optimiseFolder, quality, output)));
+        global.totalFiles = videosPath.length;
+        return Promise.all(
+          videosPath.map((videoPath, i) =>
+            processVideo(
+              videoPath,
+              optimiseFolder,
+              quality,
+              output,
+              lastOrOnlyOne(videosPath, i)
+            )
+          )
+        );
       }
     })
     .then(() => {
-      process.send({ text: 'Video optimisation completed 😄' });
+      process.send({ text: "Video optimisation completed 😄" });
       process.exit();
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
-      process.send({ text: 'Video optimisation error 😵‍💫' });
+      process.send({ text: "Video optimisation error 😵‍💫" });
       process.exit();
-    })
-}
+    });
+};
 ```
 
 ## Credits
