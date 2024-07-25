@@ -1,29 +1,29 @@
-import Image, { type ImageProps } from 'next/image'
-import Link from 'next/link'
-import clsx from 'clsx'
-import dayjs from "dayjs"
+import Image, { type ImageProps } from "next/image";
+import Link from "next/link";
+import clsx from "clsx";
+import dayjs from "dayjs";
 
-import { Button } from '@/components/Button'
-import { Card } from '@/components/Card'
-import { Container } from '@/components/Container'
-import Newsletter from '@/components/NewsLetter'
+import { Button } from "@/components/Button";
+import { Card } from "@/components/Card";
+import { Container } from "@/components/Container";
+
 import {
   GitHubIcon,
   InstagramIcon,
   LinkedInIcon,
   XIcon,
-} from '@/components/SocialIcons'
-import danphe from '@/images/logos/danphe.svg'
-import image1 from '@/images/photos/image-1.jpeg'
-import image2 from '@/images/photos/image-2.jpeg'
-import image3 from '@/images/photos/image-3.jpeg'
-import image4 from '@/images/photos/image-4.jpeg'
-import image5 from '@/images/photos/image-5.jpeg'
+} from "@/components/SocialIcons";
+import danphe from "@/images/logos/danphe.svg";
+import image1 from "@/images/photos/image-1.jpeg";
+import image2 from "@/images/photos/image-2.jpeg";
+import image3 from "@/images/photos/image-3.jpeg";
+import image4 from "@/images/photos/image-4.jpeg";
+import image5 from "@/images/photos/image-5.jpeg";
 
-import { type ArticleWithSlug, getAllArticles } from '@/lib/articles'
-import { formatDate } from '@/lib/formatDate'
+import { type ArticleWithSlug, getAllArticles } from "@/lib/articles";
+import { formatDate } from "@/lib/formatDate";
 
-function BriefcaseIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+function BriefcaseIcon(props: React.ComponentPropsWithoutRef<"svg">) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -43,10 +43,10 @@ function BriefcaseIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
         className="stroke-zinc-400 dark:stroke-zinc-500"
       />
     </svg>
-  )
+  );
 }
 
-function ArrowDownIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+function ArrowDownIcon(props: React.ComponentPropsWithoutRef<"svg">) {
   return (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" {...props}>
       <path
@@ -56,7 +56,7 @@ function ArrowDownIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
         strokeLinejoin="round"
       />
     </svg>
-  )
+  );
 }
 
 function Article({ article }: { article: ArticleWithSlug }) {
@@ -71,38 +71,38 @@ function Article({ article }: { article: ArticleWithSlug }) {
       <Card.Description>{article.description}</Card.Description>
       <Card.Cta>Read article</Card.Cta>
     </Card>
-  )
+  );
 }
 
 function SocialLink({
   icon: Icon,
   ...props
 }: React.ComponentPropsWithoutRef<typeof Link> & {
-  icon: React.ComponentType<{ className?: string }>
+  icon: React.ComponentType<{ className?: string }>;
 }) {
   return (
     <Link className="group -m-1 p-1" {...props}>
       <Icon className="h-6 w-6 fill-zinc-500 transition group-hover:fill-zinc-600 dark:fill-zinc-400 dark:group-hover:fill-zinc-300" />
     </Link>
-  )
+  );
 }
 
 interface Role {
-  company: string
-  title: string
-  logo: ImageProps['src']
-  start: string | { label: string; dateTime: string }
-  end: string | { label: string; dateTime: string }
+  company: string;
+  title: string;
+  logo: ImageProps["src"];
+  start: string | { label: string; dateTime: string };
+  end: string | { label: string; dateTime: string };
 }
 
 function Role({ role }: { role: Role }) {
   let startLabel =
-    typeof role.start === 'string' ? role.start : role.start.label
+    typeof role.start === "string" ? role.start : role.start.label;
   let startDate =
-    typeof role.start === 'string' ? role.start : role.start.dateTime
+    typeof role.start === "string" ? role.start : role.start.dateTime;
 
-  let endLabel = typeof role.end === 'string' ? role.end : role.end.label
-  let endDate = typeof role.end === 'string' ? role.end : role.end.dateTime
+  let endLabel = typeof role.end === "string" ? role.end : role.end.label;
+  let endDate = typeof role.end === "string" ? role.end : role.end.dateTime;
 
   return (
     <li className="flex gap-4">
@@ -123,28 +123,28 @@ function Role({ role }: { role: Role }) {
           className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
           aria-label={`${startLabel} until ${endLabel}`}
         >
-          <time dateTime={startDate}>{startLabel}</time>{' '}
-          <span aria-hidden="true">—</span>{' '}
+          <time dateTime={startDate}>{startLabel}</time>{" "}
+          <span aria-hidden="true">—</span>{" "}
           <time dateTime={endDate}>{endLabel}</time>
         </dd>
       </dl>
     </li>
-  )
+  );
 }
 
 function Resume() {
   let resume: Array<Role> = [
     {
-      company: 'Danphe Software Labs',
-      title: 'Software Developer',
+      company: "Danphe Software Labs",
+      title: "Software Developer",
       logo: danphe,
-      start: '2023',
+      start: "2023",
       end: {
-        label: 'Present',
-        dateTime: dayjs().format('YYYY'),
+        label: "Present",
+        dateTime: dayjs().format("YYYY"),
       },
-    }
-  ]
+    },
+  ];
 
   return (
     <div className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
@@ -157,16 +157,27 @@ function Resume() {
           <Role key={roleIndex} role={role} />
         ))}
       </ol>
-      <Button target='_blank' href="https://drive.google.com/file/d/1z6iI3FXWZ4r7rqQld3j0FhN37qecXACk/view?usp=sharing" variant="secondary" className="group mt-6 w-full">
+      <Button
+        target="_blank"
+        href="https://drive.google.com/file/d/1z6iI3FXWZ4r7rqQld3j0FhN37qecXACk/view?usp=sharing"
+        variant="secondary"
+        className="group mt-6 w-full"
+      >
         Download CV
         <ArrowDownIcon className="h-4 w-4 stroke-zinc-400 transition group-active:stroke-zinc-600 dark:group-hover:stroke-zinc-50 dark:group-active:stroke-zinc-50" />
       </Button>
     </div>
-  )
+  );
 }
 
 function Photos() {
-  let rotations = ['rotate-2', '-rotate-2', 'rotate-2', 'rotate-2', '-rotate-2']
+  let rotations = [
+    "rotate-2",
+    "-rotate-2",
+    "rotate-2",
+    "rotate-2",
+    "-rotate-2",
+  ];
 
   return (
     <div className="mt-16 sm:mt-20">
@@ -175,8 +186,8 @@ function Photos() {
           <div
             key={image.src}
             className={clsx(
-              'relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 sm:w-72 sm:rounded-2xl dark:bg-zinc-800',
-              rotations[imageIndex % rotations.length],
+              "relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 sm:w-72 sm:rounded-2xl dark:bg-zinc-800",
+              rotations[imageIndex % rotations.length]
             )}
           >
             <Image
@@ -189,11 +200,11 @@ function Photos() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 export default async function Home() {
-  let articles = (await getAllArticles()).slice(0, 4)
+  let articles = (await getAllArticles()).slice(0, 4);
 
   return (
     <>
@@ -203,9 +214,13 @@ export default async function Home() {
             Tech Enthusiast, Problem Solver, and Amateur Guitarist
           </h1>
           <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-            I&apos;m Rohan Poudel, a tech enthusiast and an amateur guitarist based in Kathmandu, Nepal.
-            Specializing in Ruby on Rails, Next.js, Node.js, React, and React Native. I thrive on unraveling intricate tech challenges. As an avid guitarist and motorcycle adventurer,
-            I find joy and inspiration in strumming melodies and traveling on my motorbike while also exploring the endless possibilities within the realm of technology.
+            Hey there! I'm Rohan Poudel, a software developer and amateur
+            guitarist from Kathmandu, Nepal. I enjoy creating innovative
+            solutions and bringing ideas to life through code. You can find me
+            strumming my guitar or exploring new places on my motorbike when I'm
+            not coding. Whether it's a new melody, an exciting road, or the
+            latest tech trends, I'm always looking for the next adventure and
+            inspiration.
           </p>
           <div className="mt-6 flex gap-6">
             <SocialLink
@@ -240,11 +255,10 @@ export default async function Home() {
             ))}
           </div>
           <div className="space-y-10 lg:pl-16 xl:pl-24">
-            <Newsletter />
             <Resume />
           </div>
         </div>
       </Container>
     </>
-  )
+  );
 }
