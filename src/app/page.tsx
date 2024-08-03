@@ -138,11 +138,8 @@ function Resume() {
       company: "Danphe Software Labs",
       title: "Software Developer",
       logo: danphe,
-      start: "2023",
-      end: {
-        label: "Present",
-        dateTime: dayjs().format("YYYY"),
-      },
+      start: "July 2023",
+      end: "July 2024",
     },
   ];
 
