@@ -208,16 +208,15 @@ export default async function Home() {
       <Container className="mt-9">
         <div className="max-w-2xl">
           <h1 className="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
-            Tech Enthusiast, Problem Solver, and Amateur Guitarist
+            Tech Enthusiast, Problem Solver, and AI Enthusiast
           </h1>
           <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-            Hey there! I'm Rohan Poudel, a software developer and amateur
-            guitarist from Kathmandu, Nepal. I enjoy creating innovative
-            solutions and bringing ideas to life through code. You can find me
-            strumming my guitar or exploring new places on my motorbike when I'm
-            not coding. Whether it's a new melody, an exciting road, or the
-            latest tech trends, I'm always looking for the next adventure and
-            inspiration.
+            Hey there! I'm Rohan Poudel, a software developer and AI enthisiast
+            from Kathmandu, Nepal. I enjoy creating innovative solutions and
+            bringing ideas to life through code. You can find me strumming my
+            guitar or exploring new places on my motorbike when I'm not coding.
+            Whether it's a new melody, an exciting road, or the latest tech
+            trends, I'm always looking for the next adventure and inspiration.
           </p>
           <div className="mt-6 flex gap-6">
             <SocialLink
