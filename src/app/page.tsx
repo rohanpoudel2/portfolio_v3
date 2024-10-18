@@ -14,6 +14,7 @@ import {
   XIcon,
 } from "@/components/SocialIcons";
 import danphe from "@/images/logos/danphe.svg";
+import versity from "@/images/logos/versity_tech.svg";
 import image1 from "@/images/photos/image-1.jpeg";
 import image2 from "@/images/photos/image-2.jpeg";
 import image3 from "@/images/photos/image-3.jpeg";
@@ -136,10 +137,17 @@ function Resume() {
   let resume: Array<Role> = [
     {
       company: "Danphe Software Labs",
-      title: "Software Developer",
+      title: "Junior Software Engineer",
       logo: danphe,
       start: "July 2023",
       end: "July 2024",
+    },
+    {
+      company: "Versity Tech",
+      title: "Software Engineer",
+      logo: versity,
+      start: "January 2024",
+      end: "June 2024",
     },
   ];
 
@@ -156,7 +164,7 @@ function Resume() {
       </ol>
       <Button
         target="_blank"
-        href="https://drive.google.com/file/d/1z6iI3FXWZ4r7rqQld3j0FhN37qecXACk/view?usp=sharing"
+        href="https://drive.google.com/file/d/1xbVuyKHSj2tOQrXs6otNqUi2gr50G9PU/view?usp=sharing"
         variant="secondary"
         className="group mt-6 w-full"
       >
