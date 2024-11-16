@@ -273,6 +273,18 @@ const USALocations: Location[] = [
     description: "JFK Airport",
     icon: planeMarker,
   },
+  {
+    title: "Fort Worth",
+    position: [32.7699, -97.1694],
+    description: "Fort Worth",
+    icon: planeMarker,
+  },
+  {
+    title: "Princeton",
+    position: [40.3572, -74.667],
+    description: "Princeton",
+    icon: planeMarker,
+  },
 ];
 
 const UAELocations: Location[] = [

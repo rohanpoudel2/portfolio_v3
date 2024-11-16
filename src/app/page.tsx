@@ -1,7 +1,5 @@
 import Image, { type ImageProps } from "next/image";
 import Link from "next/link";
-import clsx from "clsx";
-import dayjs from "dayjs";
 
 import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
@@ -13,16 +11,41 @@ import {
   LinkedInIcon,
   XIcon,
 } from "@/components/SocialIcons";
+import unh from "@/images/logos/unh.svg";
+import lbu from "@/images/logos/lbu.svg";
 import danphe from "@/images/logos/danphe.svg";
 import versity from "@/images/logos/versity_tech.svg";
-import image1 from "@/images/photos/image-1.jpeg";
-import image2 from "@/images/photos/image-2.jpeg";
-import image3 from "@/images/photos/image-3.jpeg";
-import image4 from "@/images/photos/image-4.jpeg";
-import image5 from "@/images/photos/image-5.jpeg";
 
 import { type ArticleWithSlug, getAllArticles } from "@/lib/articles";
 import { formatDate } from "@/lib/formatDate";
+import Photos from "@/components/ImagesScroll";
+
+function GraduationHatIcon(props: React.ComponentPropsWithoutRef<"svg">) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <path
+        d="M3 8L12 3l9 5-9 5-9-5Z"
+        className="fill-zinc-100 stroke-zinc-400 dark:fill-zinc-100/10 dark:stroke-zinc-500"
+      />
+      <path
+        d="M12 13V8M12 13c0 1.5 0 3-.75 4.5M12 13c0 1.5 0 3 .75 4.5"
+        className="stroke-zinc-400 dark:stroke-zinc-500"
+      />
+      <path
+        d="M3.5 8v6c0 1.5 0 2.5 1.5 3.5s2.5 1.5 4 1.5h6c1.5 0 2.5-.5 4-1.5s1.5-2 1.5-3.5V8"
+        className="stroke-zinc-400 dark:stroke-zinc-500"
+      />
+    </svg>
+  );
+}
 
 function BriefcaseIcon(props: React.ComponentPropsWithoutRef<"svg">) {
   return (
@@ -96,7 +119,7 @@ interface Role {
   end: string | { label: string; dateTime: string };
 }
 
-function Role({ role }: { role: Role }) {
+function Role({ role, type = "experience" }: { role: Role; type?: string }) {
   let startLabel =
     typeof role.start === "string" ? role.start : role.start.label;
   let startDate =
@@ -111,23 +134,45 @@ function Role({ role }: { role: Role }) {
         <Image src={role.logo} alt="" className="h-7 w-7" unoptimized />
       </div>
       <dl className="flex flex-auto flex-wrap gap-x-2">
-        <dt className="sr-only">Company</dt>
-        <dd className="w-full flex-none text-sm font-medium text-zinc-900 dark:text-zinc-100">
-          {role.company}
-        </dd>
-        <dt className="sr-only">Role</dt>
+        <dt className="sr-only">
+          {type === "education" ? "School" : "Company"}
+        </dt>
+        {type === "education" ? (
+          <div>
+            <dd className="w-full flex-none text-sm font-medium text-zinc-900 dark:text-zinc-100">
+              {role.company}
+            </dd>
+            <dd
+              className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
+              aria-label={`${startLabel} until ${endLabel}`}
+            >
+              <time dateTime={startDate}>{startLabel}</time>{" "}
+              <span aria-hidden="true">—</span>{" "}
+              <time dateTime={endDate}>{endLabel}</time>
+            </dd>
+          </div>
+        ) : (
+          <dd className="w-full flex-none text-sm font-medium text-zinc-900 dark:text-zinc-100">
+            {role.company}
+          </dd>
+        )}
+        <dt className="sr-only">{type === "education" ? "Major" : "Role"}</dt>
         <dd className="text-xs text-zinc-500 dark:text-zinc-400">
           {role.title}
         </dd>
-        <dt className="sr-only">Date</dt>
-        <dd
-          className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
-          aria-label={`${startLabel} until ${endLabel}`}
-        >
-          <time dateTime={startDate}>{startLabel}</time>{" "}
-          <span aria-hidden="true">—</span>{" "}
-          <time dateTime={endDate}>{endLabel}</time>
-        </dd>
+        {type !== "education" && (
+          <>
+            <dt className="sr-only">Date</dt>
+            <dd
+              className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
+              aria-label={`${startLabel} until ${endLabel}`}
+            >
+              <time dateTime={startDate}>{startLabel}</time>{" "}
+              <span aria-hidden="true">—</span>{" "}
+              <time dateTime={endDate}>{endLabel}</time>
+            </dd>
+          </>
+        )}
       </dl>
     </li>
   );
@@ -175,35 +220,35 @@ function Resume() {
   );
 }
 
-function Photos() {
-  let rotations = [
-    "rotate-2",
-    "-rotate-2",
-    "rotate-2",
-    "rotate-2",
-    "-rotate-2",
+function Education() {
+  let resume: Array<Role> = [
+    {
+      company: "University of New Haven",
+      title: "Masters of Science in Computer Science",
+      logo: unh,
+      start: "August 2024",
+      end: "May 2026 (Expected)",
+    },
+    {
+      company: "Leeds Beckett University",
+      title: "Bachelor of Science in Computing",
+      logo: lbu,
+      start: "Aug 2020",
+      end: "July 2023",
+    },
   ];
 
   return (
-    <div className="mt-16 sm:mt-20">
-      <div className="-my-4 flex justify-center gap-5 overflow-hidden py-4 sm:gap-8">
-        {[image1, image2, image3, image4, image5].map((image, imageIndex) => (
-          <div
-            key={image.src}
-            className={clsx(
-              "relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 sm:w-72 sm:rounded-2xl dark:bg-zinc-800",
-              rotations[imageIndex % rotations.length]
-            )}
-          >
-            <Image
-              src={image}
-              alt=""
-              sizes="(min-width: 640px) 18rem, 11rem"
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-          </div>
+    <div className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
+      <h2 className="flex text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+        <GraduationHatIcon className="h-6 w-6 flex-none" />
+        <span className="ml-3">Education</span>
+      </h2>
+      <ol className="mt-6 space-y-4">
+        {resume.map((role, roleIndex) => (
+          <Role key={roleIndex} role={role} type="education" />
         ))}
-      </div>
+      </ol>
     </div>
   );
 }
@@ -219,12 +264,12 @@ export default async function Home() {
             Tech Enthusiast, Problem Solver, and AI Enthusiast
           </h1>
           <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-            Hey there! I'm Rohan Poudel, a software developer and AI enthisiast
-            from Kathmandu, Nepal. I enjoy creating innovative solutions and
-            bringing ideas to life through code. You can find me strumming my
-            guitar or exploring new places on my motorbike when I'm not coding.
-            Whether it's a new melody, an exciting road, or the latest tech
-            trends, I'm always looking for the next adventure and inspiration.
+            Hey there! I'm Rohan Poudel, a software developer and AI enthisiast.
+            I enjoy creating innovative solutions and bringing ideas to life
+            through code. You can find me strumming my guitar or exploring new
+            places on my motorbike when I'm not coding. Whether it's a new
+            melody, an exciting road, or the latest tech trends, I'm always
+            looking for the next adventure and inspiration.
           </p>
           <div className="mt-6 flex gap-6">
             <SocialLink
@@ -260,6 +305,7 @@ export default async function Home() {
           </div>
           <div className="space-y-10 lg:pl-16 xl:pl-24">
             <Resume />
+            <Education />
           </div>
         </div>
       </Container>
