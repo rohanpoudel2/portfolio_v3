@@ -164,11 +164,11 @@ function Resume() {
       </ol>
       <Button
         target="_blank"
-        href="https://drive.google.com/file/d/1xbVuyKHSj2tOQrXs6otNqUi2gr50G9PU/view?usp=sharing"
+        href="https://drive.google.com/file/d/16hgeVIIRyQ8Wj55o78VV-2_AUq8CrQB2/view?usp=sharing"
         variant="secondary"
         className="group mt-6 w-full"
       >
-        Download CV
+        Download Resume
         <ArrowDownIcon className="h-4 w-4 stroke-zinc-400 transition group-active:stroke-zinc-600 dark:group-hover:stroke-zinc-50 dark:group-active:stroke-zinc-50" />
       </Button>
     </div>
