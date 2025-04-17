@@ -8,8 +8,30 @@ import dbq from '@/images/logos/dbq.svg'
 import drawing from '@/images/logos/drawing.svg'
 import compressor from '@/images/logos/compressor.svg'
 import ujyaloKrishi from '@/images/logos/ujyalo_krishi.svg'
+import medtrain from '@/images/logos/medtrain_ai.png'
 
 const projects = [
+  {
+    name: 'Commute Mate',
+    description:
+      'CommuteMate matches drivers and passengers based on the proximity of their start and end points, facilitating cost-effective and eco-friendly ride-sharing.',
+    link: { href: 'https://devpost.com/software/commutemate?ref_content=my-projects-tab&ref_feature=my_projects', label: 'devpost.com' },
+    logo: gadi
+  },
+  {
+    name: 'MedTrain AI',
+    description:
+      'MedTrain AI is a VR medical app that helps students practice patient interviews using Quest 3s. Students learn diagnostic skills through AI-powered virtual consultations.',
+    link: { href: 'https://dorahacks.io/buidl/19422', label: 'dorahacks.io' },
+    logo: medtrain
+  },
+  {
+    name: 'Image and Video Compressor',
+    description:
+      'A NodeJS library to compress images and videos from the CLI.',
+    link: { href: 'https://www.npmjs.com/package/image-and-video-compressor', label: 'npmjs.com' },
+    logo: compressor,
+  },
   {
     name: 'Drawing APP',
     description:
@@ -25,26 +47,12 @@ const projects = [
     logo: ujyaloKrishi,
   },
   {
-    name: 'GADI',
-    description:
-      'Car ecommerce website with authentication, authorization and stripe checkout. Built on Laravel.',
-    link: { href: 'https://github.com/rohanpoudel2/GADI', label: 'github.com' },
-    logo: gadi,
-  },
-  {
     name: 'Daily Bread Quintessentials Mart',
     description:
       'A grocery shopping site that has full trader and customer use cases with a fully functional admin dashboard with interactive graphs.',
     link: { href: 'https://drive.google.com/drive/folders/1mX8wwKPxlRMpBXUa-zIJC3SabZOfLk-0', label: 'drive.google.com' },
     logo: dbq,
-  },
-  {
-    name: 'Image and Video Compressor',
-    description:
-      'A NodeJS library to compress images and videos from the CLI.',
-    link: { href: 'https://www.npmjs.com/package/image-and-video-compressor', label: 'npmjs.com' },
-    logo: compressor,
-  },
+  }
 ]
 
 function LinkIcon(props: React.ComponentPropsWithoutRef<'svg'>) {

@@ -164,7 +164,7 @@ function Resume() {
       </ol>
       <Button
         target="_blank"
-        href="https://drive.google.com/file/d/16hgeVIIRyQ8Wj55o78VV-2_AUq8CrQB2/view?usp=sharing"
+        href="https://drive.google.com/file/d/1LSDrpFjZ7DtNnl2IDCIDcgORYdW7Rltw/view?usp=sharing"
         variant="secondary"
         className="group mt-6 w-full"
       >
@@ -219,12 +219,12 @@ export default async function Home() {
             Tech Enthusiast, Problem Solver, and AI Enthusiast
           </h1>
           <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-            Hey there! I'm Rohan Poudel, a software developer and AI enthisiast
-            from Kathmandu, Nepal. I enjoy creating innovative solutions and
-            bringing ideas to life through code. You can find me strumming my
-            guitar or exploring new places on my motorbike when I'm not coding.
-            Whether it's a new melody, an exciting road, or the latest tech
-            trends, I'm always looking for the next adventure and inspiration.
+            Hey there! I'm Rohan Poudel, a software developer and AI enthisiast.
+            I enjoy creating innovative solutions and bringing ideas to life
+            through code. You can find me strumming my guitar or exploring new
+            places on my motorbike when I'm not coding. Whether it's a new melody,
+            an exciting road, or the latest tech trends, I'm always looking for
+            the next adventure and inspiration.
           </p>
           <div className="mt-6 flex gap-6">
             <SocialLink
